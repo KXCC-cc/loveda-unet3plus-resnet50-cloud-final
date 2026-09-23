@@ -1,0 +1,1 @@
+epoch,train_loss,val_main_loss,mean_dice,miou,learning_rate,background_iou,building_iou,road_iou,water_iou,barren_iou,forest_iou,agricultural_iou,background_dice,building_dice,road_dice,water_dice,barren_dice,forest_dice,agricultural_dice

@@ -1,0 +1,42 @@
+{
+  "status": "complete",
+  "best_epoch": 24,
+  "best_miou": 0.48673445612346994,
+  "best_dice": 0.6502697251948383,
+  "best_dice_epoch": 24,
+  "best_val_loss": 1.7310836375866772,
+  "best_val_loss_epoch": 24,
+  "best_miou_epoch_dice": 0.6502697251948383,
+  "best_miou_epoch_val_loss": 1.7310836375866772,
+  "best_epoch_per_class_iou": {
+    "background": 0.5300868907267048,
+    "building": 0.605446271938943,
+    "road": 0.5075436848824448,
+    "water": 0.526255800079848,
+    "barren": 0.32613465813905296,
+    "forest": 0.4121493903686955,
+    "agricultural": 0.49952449672860055
+  },
+  "per_class_best_iou": {
+    "background": 0.5300868907267048,
+    "building": 0.605446271938943,
+    "road": 0.5112291989269292,
+    "water": 0.6089292158447914,
+    "barren": 0.32613465813905296,
+    "forest": 0.41959836457013194,
+    "agricultural": 0.49952449672860055
+  },
+  "final_epoch": 41,
+  "final_per_class_iou": {
+    "background": 0.525873803175728,
+    "building": 0.6013530202678931,
+    "road": 0.5112056066083481,
+    "water": 0.5342610205527968,
+    "barren": 0.25770564010805075,
+    "forest": 0.4151801178234374,
+    "agricultural": 0.48963073997955553
+  },
+  "best_model": "/mnt/workspace/loveda-unet3plus-resnet50-cloud/runs/cloud_resnet50_24gb_eff4_40ep/best_model.pth",
+  "baseline_reference_miou": 0.4669311579969285,
+  "delta_vs_resnet34": 0.019803298126541413
+}

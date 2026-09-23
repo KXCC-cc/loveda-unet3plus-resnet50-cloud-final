@@ -1,0 +1,59 @@
+/usr/local/lib/python3.11/site-packages/torch/cuda/__init__.py:56: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+PyTorch: 2.3.1+cu121
+CUDA runtime: 12.1
+CUDA available: True
+GPU: NVIDIA A10
+Total VRAM: 22.18 GiB
+Train images: 2522
+Val images: 1669
+Preflight status: OK
+/usr/local/lib/python3.11/site-packages/torch/cuda/__init__.py:56: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+PyTorch: 2.3.1+cu121 | CUDA available: True
+Device: cuda:0 | CUDA device count: 1
+GPU name: NVIDIA A10 | AMP enabled: True
+Train images: 2522 | Val images: 1669 | physical batch=2, accumulation=8, effective batch=16
+Max optimizer steps: 15000 | resolved lr: 0.01
+Optimizer parameter-group base LRs: all=0.01
+Backbone weights: IMAGENET1K_V1
+Epoch 1 | micro 400 | optimizer 50/15000 | loss 3.6963 | lr 0.00996999
+Epoch 1 | micro 800 | optimizer 100/15000 | loss 3.3094 | lr 0.00993998
+Epoch 1 | micro 1200 | optimizer 150/15000 | loss 3.2469 | lr 0.00990995
+Epoch 1 complete | optimizer 157/15000 | train loss 3.7523 | 1052.9s
+Saved epoch checkpoint: epoch=1, optimizer=157 -> /mnt/workspace/loveda-unet3plus-resnet50-cloud/runs/cloud_resnet50_24gb/last_checkpoint.pth
+Epoch 2 | micro 1600 | optimizer 200/15000 | loss 2.6311 | lr 0.00987992
+Epoch 2 | micro 2000 | optimizer 250/15000 | loss 2.9180 | lr 0.00984987
+Epoch 2 | micro 2400 | optimizer 300/15000 | loss 3.0184 | lr 0.00981982
+Epoch 2 complete | optimizer 314/15000 | train loss 2.9838 | 1045.7s
+Saved epoch checkpoint: epoch=2, optimizer=314 -> /mnt/workspace/loveda-unet3plus-resnet50-cloud/runs/cloud_resnet50_24gb/last_checkpoint.pth
+Epoch 3 | micro 2800 | optimizer 350/15000 | loss 2.6015 | lr 0.00978975
+Epoch 3 | micro 3200 | optimizer 400/15000 | loss 3.5369 | lr 0.00975968
+Epoch 3 | micro 3600 | optimizer 450/15000 | loss 2.9544 | lr 0.00972959
+Epoch 3 complete | optimizer 471/15000 | train loss 2.7983 | 1045.3s
+Saved epoch checkpoint: epoch=3, optimizer=471 -> /mnt/workspace/loveda-unet3plus-resnet50-cloud/runs/cloud_resnet50_24gb/last_checkpoint.pth
+Epoch 4 | micro 4008 | optimizer 500/15000 | loss 2.7459 | lr 0.00969949
+Epoch 4 | micro 4408 | optimizer 550/15000 | loss 2.8559 | lr 0.00966939
+Epoch 4 | micro 4808 | optimizer 600/15000 | loss 2.7001 | lr 0.00963927
+Epoch 4 complete | optimizer 627/15000 | train loss 2.7227 | 1044.4s
+Saved epoch checkpoint: epoch=4, optimizer=627 -> /mnt/workspace/loveda-unet3plus-resnet50-cloud/runs/cloud_resnet50_24gb/last_checkpoint.pth
+Epoch 5 | micro 5208 | optimizer 650/15000 | loss 2.7449 | lr 0.00960914
+Epoch 5 | micro 5608 | optimizer 700/15000 | loss 2.3391 | lr 0.009579
+Epoch 5 | micro 6008 | optimizer 750/15000 | loss 2.5209 | lr 0.00954885
+Epoch 5 complete | optimizer 784/15000 | train loss 2.6158 | 1043.8s
+Saved epoch checkpoint: epoch=5, optimizer=784 -> /mnt/workspace/loveda-unet3plus-resnet50-cloud/runs/cloud_resnet50_24gb/last_checkpoint.pth
+Epoch 6 | micro 6408 | optimizer 800/15000 | loss 2.8865 | lr 0.00951869
+Epoch 6 | micro 6808 | optimizer 850/15000 | loss 2.6312 | lr 0.00948852
+Epoch 6 | micro 7208 | optimizer 900/15000 | loss 2.6966 | lr 0.00945834
+Epoch 6 complete | optimizer 941/15000 | train loss 2.5903 | 1043.7s
+Saved epoch checkpoint: epoch=6, optimizer=941 -> /mnt/workspace/loveda-unet3plus-resnet50-cloud/runs/cloud_resnet50_24gb/last_checkpoint.pth
+Epoch 7 | micro 7608 | optimizer 950/15000 | loss 2.2553 | lr 0.00942815
+Traceback (most recent call last):
+  File "/mnt/workspace/loveda-unet3plus-resnet50-cloud/train.py", line 48, in <module>
+    main()
+  File "/mnt/workspace/loveda-unet3plus-resnet50-cloud/train.py", line 44, in main
+    run_training(config, args.resume)
+  File "/mnt/workspace/loveda-unet3plus-resnet50-cloud/engine/trainer.py", line 460, in run_training
+    update_loss += float(loss.detach())
+                   ^^^^^^^^^^^^^^^^^^^^
+KeyboardInterrupt

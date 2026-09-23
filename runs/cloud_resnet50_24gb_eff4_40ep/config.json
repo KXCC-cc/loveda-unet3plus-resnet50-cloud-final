@@ -1,0 +1,147 @@
+{
+  "run": {
+    "name": "cloud_resnet50_24gb",
+    "output_dir": "/mnt/workspace/loveda-unet3plus-resnet50-cloud/runs/cloud_resnet50_24gb_eff4_40ep"
+  },
+  "seed": 42,
+  "model": {
+    "type": "unet3plus_resnet",
+    "num_classes": 7,
+    "backbone": "resnet50",
+    "pretrained": true,
+    "weights": "IMAGENET1K_V1",
+    "standard_resnet_stem": false,
+    "freeze_encoder_bn": true,
+    "cat_channels": 64,
+    "resolved_weights": "IMAGENET1K_V1"
+  },
+  "data": {
+    "root": "/mnt/workspace/loveda-unet3plus-resnet50-cloud/dataset",
+    "strategy": "crop",
+    "crop_size": [
+      512,
+      512
+    ],
+    "samples_per_image": 1,
+    "train_scales": [
+      1.0
+    ],
+    "augmentation": {
+      "mode": "independent",
+      "one_of_probability": 0.75,
+      "horizontal_flip": 0.5,
+      "vertical_flip": 0.5,
+      "rotate90": 1.0,
+      "color_jitter": 0.0
+    },
+    "class_aware_crop": {
+      "probability": 0.0,
+      "classes": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "min_target_pixels": 512,
+      "max_attempts": 8
+    },
+    "loader": {
+      "batch_size": 2,
+      "num_workers": 4,
+      "pin_memory": true,
+      "persistent_workers": true,
+      "prefetch_factor": 2
+    }
+  },
+  "loss": {
+    "profile": "unet3plus_performance",
+    "ce_weight": 1.0,
+    "dice_weight": 1.0,
+    "focal_weight": 0.0,
+    "focal_gamma": 2.0,
+    "aux_weights": [
+      0.5,
+      0.25,
+      0.125,
+      0.0625
+    ],
+    "class_weights": "none",
+    "class_stats_path": "/mnt/workspace/loveda-unet3plus-resnet50-cloud/class_stats.json"
+  },
+  "optimizer": {
+    "name": "sgd",
+    "lr": 0.01,
+    "momentum": 0.9,
+    "weight_decay": 0.0001,
+    "lr_scale": "linear",
+    "reference_batch_size": 16,
+    "differential_lr": null
+  },
+  "scheduler": {
+    "name": "poly",
+    "power": 0.9
+  },
+  "training": {
+    "max_iters": 25200,
+    "epochs": null,
+    "accumulation_steps": 2,
+    "gradient_clip": 1.0,
+    "log_interval": 50
+  },
+  "validation": {
+    "interval_epochs": 8,
+    "tile_size": [
+      512,
+      512
+    ],
+    "stride": [
+      512,
+      512
+    ],
+    "patch_batch_size": 2,
+    "scales": [
+      1.0
+    ],
+    "horizontal_flip_tta": false,
+    "accumulate_on_device": true,
+    "visualization_samples": 6,
+    "visualization_interval_epochs": 5
+  },
+  "runtime": {
+    "device": "cuda:0",
+    "amp": true,
+    "cudnn_benchmark": true,
+    "channels_last": true,
+    "compile": false
+  },
+  "config_path": "/mnt/workspace/loveda-unet3plus-resnet50-cloud/configs/cloud/resnet50_24gb.yaml",
+  "environment": {
+    "git_commit": "26227faefc25d401098596e4ea6467bb06c304e7",
+    "git_dirty": true,
+    "pytorch": "2.3.1+cu121",
+    "cuda_runtime": "12.1",
+    "cudnn": 8902,
+    "cuda_available": true,
+    "gpu": "NVIDIA A10",
+    "cuda_device_count": 1
+  },
+  "resolved": {
+    "physical_batch": 2,
+    "accumulation_steps": 2,
+    "effective_batch": 4,
+    "updates_per_epoch": 630,
+    "max_optimizer_steps": 25200,
+    "learning_rate": 0.0025,
+    "optimizer_group_lrs": {
+      "all": 0.0025
+    },
+    "encoder_lr": 0.0025,
+    "decoder_lr": 0.0025,
+    "scheduler": "poly",
+    "warmup_updates": 0,
+    "warmup_start_factor": 0.01,
+    "baseline_reference_miou": 0.4669311579969285,
+    "class_weights": null,
+    "class_frequencies": null
+  }
+}

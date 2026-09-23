@@ -1,0 +1,8 @@
+https://github.com/KXCC-cc/loveda-unet3plus-resnet50-cloud/releases/download/dataset-v1/loveda_dataset.tar.part-aa
+https://github.com/KXCC-cc/loveda-unet3plus-resnet50-cloud/releases/download/dataset-v1/loveda_dataset.tar.part-ab-00
+https://github.com/KXCC-cc/loveda-unet3plus-resnet50-cloud/releases/download/dataset-v1/loveda_dataset.tar.part-ab-01
+https://github.com/KXCC-cc/loveda-unet3plus-resnet50-cloud/releases/download/dataset-v1/loveda_dataset.tar.part-ab-02
+https://github.com/KXCC-cc/loveda-unet3plus-resnet50-cloud/releases/download/dataset-v1/loveda_dataset.tar.part-ab-03
+https://github.com/KXCC-cc/loveda-unet3plus-resnet50-cloud/releases/download/dataset-v1/loveda_dataset.tar.part-ac
+https://github.com/KXCC-cc/loveda-unet3plus-resnet50-cloud/releases/download/dataset-v1/loveda_dataset.tar.part-ad
+https://github.com/KXCC-cc/loveda-unet3plus-resnet50-cloud/releases/download/dataset-v1/loveda_dataset.tar.part-ae
