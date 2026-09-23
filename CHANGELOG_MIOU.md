@@ -32,7 +32,7 @@ Focal 没有使用 `CE=1 + Dice=1 + Focal=1`，避免把与 CE 高度相关的�
 
 这些工程改进不修改标签、ignore 规则、mIoU 算法、验证集或网络宽度。
 
-## 推荐实验顺序
+## 原计划的推荐实验顺序
 
 1. A：`resnet50_24gb.yaml`，干净的完整 ResNet50 baseline。
 2. B：`resnet50_24gb_diff_lr.yaml`。
@@ -44,11 +44,11 @@ Focal 没有使用 `CE=1 + Dice=1 + Focal=1`，避免把与 CE 高度相关的�
    `resnet50_24gb_multiscale_classaware.yaml`。
 8. 最佳 checkpoint 先做单尺度 Full Validation，再做多尺度 TTA，最后生成 Test 提交。
 
-观察点继续使用完整 Val 的 epoch 间隔。24GB 配置 effective batch=16、每 8 个数据
-轮次验证一次，约每 1260 个 optimizer updates 得到一个观察点，能够覆盖约
-2500/5000/7500/10000/12500/15000 附近且不会自动早停。
+这是设计阶段的消融顺序，不表示 B～Warmup 已经完成。原始 24GB 配置采用
+effective batch 16、每 8 个数据轮次验证一次，约每 1260 个 optimizer updates
+得到一个观察点；这些是原计划参数，不是最终 eff4_40ep 的实际参数。
 
-## 第一轮正式云训练
+## 初始实施状态（历史记录）
 
 第一轮仍运行未加入任何新策略的干净 baseline：
 
@@ -56,4 +56,34 @@ Focal 没有使用 `CE=1 + Dice=1 + Focal=1`，避免把与 CE 高度相关的�
 bash scripts/cloud_train_resnet50_24gb.sh
 ```
 
-本轮代码修改没有执行 15000 updates 正式训练，所有收益必须由后续真实实验确认。
+在加入这些可选策略时，尚未执行 15000 updates 正式训练；因此本节只记录当时的
+实现状态，不能作为实验结果。后续实际完成的训练记录如下。
+
+## 最终 ResNet50 实验结果
+
+最终正式实验位于 `runs/cloud_resnet50_24gb_eff4_40ep/`。原始
+`runs/cloud_resnet50_24gb/` 目录的 `metrics.csv` 只有表头，因此原计划的
+`batch 2 + accumulation 8 = effective batch 16`、`lr=0.01`、`15000 updates`
+没有被当作最终实验结果。
+
+实际完成配置为：physical batch `2`、accumulation `2`、effective batch `4`，
+按线性规则得到 `lr=0.0025`，并训练 `25200` 个 optimizer updates。模型保持
+ImageNet 预训练 ResNet50 Encoder、完整 U-Net 3+ Full-scale Skip Connections、
+Deep Supervision、Frozen Encoder BN、Decoder GroupNorm 和 `cat_channels=64`；训练使用
+512×512 单尺度 crop、CE + Dice、SGD/poly，Focal 与 class-aware crop 关闭。
+
+最佳 Full Validation 出现在 epoch 24：
+
+- mIoU：`0.48673445612346994`
+- mean Dice：`0.6502697251948383`
+- Val loss：`1.7310836375866772`
+- 相比 ResNet34 mIoU `0.4669311579969285` 提升 `0.019803298126541413`，约
+  `+1.98` 个 mIoU 百分点
+
+训练于 epoch 41 结束，最终 mIoU 为 `0.4764585640736871`。epoch 24 的
+`best_model.pth` 用于最终提交，LoveDA Hidden Test mIoU 为 `0.469813`；相比
+ResNet34 Hidden Test `0.457311` 提升 `0.012502`，约 `+1.25` 个百分点。
+仓库中没有 ResNet50 Test submission ID，因此不记录 ID。
+
+Differential LR、class-aware、multi-scale、Focal、warmup 及其组合在本仓库中均只应
+描述为“已实现/可选消融”。没有对应完整正式结果时，不得声称它们提高了性能。

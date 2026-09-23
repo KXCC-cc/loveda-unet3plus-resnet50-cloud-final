@@ -1,12 +1,46 @@
-# LoveDA U-Net 3+ ResNet50 云端重训快照
+# LoveDA U-Net 3+ ResNet50 最终实验归档
 
-本仓库用于在云GPU上重新运行本地RTX 4060 8GB因显存不足而失败的完整ResNet50实验。
-云端环境、数据下载和启动命令见 [CLOUD_TRAINING.md](CLOUD_TRAINING.md)，本地失败记录见
-[docs/LOCAL_OOM_RECORD.md](docs/LOCAL_OOM_RECORD.md)。
+本仓库归档 LoveDA 七类遥感语义分割从 scratch U-Net 3+ baseline、ResNet34 改进到
+最终 ResNet50 云端实验的代码、配置和结果。本地 RTX 4060 8GB 无法容纳完整
+ResNet50 训练，最终实验在 NVIDIA A10 上完成。云端方案演变见
+[CLOUD_TRAINING.md](CLOUD_TRAINING.md)，本地失败记录见
+[docs/LOCAL_OOM_RECORD.md](docs/LOCAL_OOM_RECORD.md)，最终实验的权威记录见
+[docs/resnet50_final_reference.md](docs/resnet50_final_reference.md)。
 
 2026-09-22 新增的多尺度、类别感知裁块、Focal、差分学习率和 warmup 均为独立、
 默认关闭的受控消融，不改变原 24GB baseline。完整变更、资源代价与实验顺序见
 [CHANGELOG_MIOU.md](CHANGELOG_MIOU.md)。
+
+## 最终完成实验
+
+实验演进关系如下：
+
+- Scratch U-Net 3+ 是初始 baseline，历史最佳 Full Validation mIoU 约为 `0.3457`。
+- ImageNet 预训练 ResNet34 + U-Net 3+ 是第一阶段成功改进，Full Validation mIoU
+  为 `0.466931`，LoveDA Hidden Test mIoU 为 `0.457311`。
+- 完整 ResNet50 配置在本地 RTX 4060 8GB 上受到显存限制，因此转到云端训练。
+- `runs/cloud_resnet50_24gb/` 保存最初设计的 24GB 云端方案；其
+  `metrics.csv` 只有表头，没有形成完整正式实验结果。该方案的
+  `batch 2 + accumulation 8 = effective batch 16`、`lr=0.01`、
+  `15000 optimizer updates` 只能作为历史计划参数。
+- `runs/cloud_resnet50_24gb_eff4_40ep/` 才是实际完成并用于最终结论的正式实验。
+
+最终 ResNet50 实验保持 ImageNet 预训练 ResNet50 Encoder、完整 U-Net 3+
+Full-scale Skip Connections 和 Deep Supervision。实际采用
+`batch 2 + accumulation 2 = effective batch 4`，根据线性 batch-size scaling，
+解析后的学习率为 `0.01 × 4 / 16 = 0.0025`；训练执行 `25200` 次 optimizer
+update，覆盖约 40 个数据轮次。单尺度 Full Validation 每 8 个 epoch 执行一次。
+
+| 指标 | ResNet34 | 最终 ResNet50 | 提升 |
+|---|---:|---:|---:|
+| Full Validation mIoU | 0.466931 | **0.486734** | **+0.019803（约 +1.98 个百分点）** |
+| Full Validation mean Dice | 0.632851 | **0.650270** | +0.017419 |
+| LoveDA Hidden Test mIoU | 0.457311 | **0.469813** | **+0.012502（约 +1.25 个百分点）** |
+
+最佳验证结果出现在 epoch 24，Val loss 为 `1.731084`；训练在 epoch 41 结束，
+最终 mIoU 为 `0.476459`。正式评估与提交应使用
+`runs/cloud_resnet50_24gb_eff4_40ep/best_model.pth`，而不是用于保存最终训练状态和
+恢复训练的 `last_checkpoint.pth`。仓库没有记录 ResNet50 Test submission ID，故不作虚构。
 
 ---
 
@@ -93,7 +127,7 @@ train_legacy.py          原 baseline 入口
 predict.py               新 checkpoint 推理
 predict_legacy.py        原 checkpoint 推理
 dataset/                 LoveDA 原始数据（Git 忽略）
-runs/                    新实验输出（Git 忽略）
+runs/                    实验输出（默认 Git 忽略；本仓库已归档最终云端结果）
 ```
 
 ## LoveDA 标签
@@ -362,8 +396,11 @@ batch1、accum4。若要试 batch2，应先重新运行显存工具，再做几�
 混淆矩阵、训练/验证曲线和 Rural/Urban 固定预测图，判断是 road/building 小目标、
 barren 混淆、欠拟合还是域差异。不得换验证子集、改变 ignore 规则或改变 mIoU 定义。
 
-当前代码只通过短时结构、损失、标签和单步显存测试；没有执行 15000 iterations，
-因此没有新的正式 full-Val mIoU，也不声称达到 0.45。
+上述 C/D/E 仍是后续消融建议，不代表已经执行。正式完成的 ResNet50 实验仅使用
+单尺度训练、CE + Dice，并关闭 class-aware crop、Focal、差分学习率和 warmup；其
+Full Validation mIoU 为 `0.486734`，详见
+`docs/resnet50_final_reference.md`。原计划中的 `effective batch=16`、`lr=0.01` 和
+`15000 updates` 未作为最终实验参数。
 
 ## 本地网页演示
 
